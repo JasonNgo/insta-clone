@@ -11,17 +11,19 @@ import UIKit
 import Parse
 
 class SignUpOrLoginVC: UIViewController {
-
+    
+    // TextFields
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
+    // Buttons
     @IBOutlet weak var logInBtn: UIButton!
     @IBOutlet weak var signUpBtn: UIButton!
     
+    // Labels
     @IBOutlet weak var descriptionLbl: UILabel!
     
     var activityIndicator: UIActivityIndicatorView!
-    
     var signUpMode = false
     
     override func viewDidLoad() {
@@ -94,7 +96,6 @@ class SignUpOrLoginVC: UIViewController {
                         print("User has successfully been signed up through Parse")
                     }
                 })
-                
             } else {
                 PFUser.logInWithUsername(inBackground: emailTextField.text!, password: passwordTextField.text!, block: { (user, error) in
                     
@@ -121,6 +122,5 @@ class SignUpOrLoginVC: UIViewController {
         signUpMode = !signUpMode
         signUpModeIs(active: signUpMode)
     }
-    
     
 }
