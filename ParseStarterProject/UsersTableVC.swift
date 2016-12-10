@@ -17,9 +17,28 @@ class UsersTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     @IBOutlet var tableView: UITableView!
     
+    var refreshController: UIRefreshControl!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        refresh()
         
+        refreshController = UIRefreshControl()
+        refreshController.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshController.addTarget(self, action: #selector(UsersTableVC.refresh), for: .valueChanged)
+        tableView.addSubview(refreshController)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    @IBAction func logoutBtnPressed(_ sender: Any) {
+        PFUser.logOut()
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func refresh() {
         let usersQuery = PFUser.query()
         
         usersQuery?.findObjectsInBackground(block: { (objects, error) in
@@ -27,6 +46,10 @@ class UsersTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 print("Error querying users")
             } else {
                 if let users = objects {
+                    self.usernames.removeAll()
+                    self.userIDs.removeAll()
+                    self.isFollowing.removeAll()
+                    
                     for object in users {
                         if let user = object as? PFUser {
                             if user.objectId != PFUser.current()?.objectId {
@@ -50,6 +73,7 @@ class UsersTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                                         
                                         if self.isFollowing.count == self.usernames.count {
                                             self.tableView.reloadData()
+                                            self.refreshController.endRefreshing()
                                         }
                                     }
                                 })
@@ -59,15 +83,6 @@ class UsersTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 }
             }
         })
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    @IBAction func logoutBtnPressed(_ sender: Any) {
-        PFUser.logOut()
-        self.dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Table view data source
