@@ -26,6 +26,14 @@ class SignUpOrLoginVC: UIViewController {
     var activityIndicator: UIActivityIndicatorView!
     var signUpMode = false
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if PFUser.current() != nil {
+            self.performSegue(withIdentifier: "showUserTable", sender: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -94,6 +102,8 @@ class SignUpOrLoginVC: UIViewController {
                         self.createAlertWith(title: "Sign Up Error", message: displayErrorMessage)
                     } else {
                         print("User has successfully been signed up through Parse")
+                        
+                        self.performSegue(withIdentifier: "showUserTable", sender: nil)
                     }
                 })
             } else {
@@ -112,6 +122,8 @@ class SignUpOrLoginVC: UIViewController {
                         self.createAlertWith(title: "Log In Error", message: displayErrorMessage)
                     } else {
                         print("User successfully logged in")
+                        
+                        self.performSegue(withIdentifier: "showUserTable", sender: nil)
                     }
                 })
             }
