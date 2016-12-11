@@ -66,7 +66,6 @@ class SignUpOrLoginVC: UIViewController {
         
         let okAction = UIAlertAction(title: "OK", style: .default, handler: { (_) in
             print("OK button pressed")
-            self.dismiss(animated: true, completion: nil)
         })
         
         alertController.addAction(okAction)

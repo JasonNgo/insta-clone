@@ -33,6 +33,11 @@ class UsersTableVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func postBtnPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "showPosts", sender: self)
+    }
+    
+    
     @IBAction func logoutBtnPressed(_ sender: Any) {
         PFUser.logOut()
         self.dismiss(animated: true, completion: nil)
